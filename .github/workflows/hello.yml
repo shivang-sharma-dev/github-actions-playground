@@ -1,11 +1,25 @@
-name: My First Action
+name: Understanding Jobs
 
 on: [push]
 
 jobs:
-  say-hello:
+  explore-runner:
     runs-on: ubuntu-latest
     steps:
-      - name: Print message
-        run: "echo I am learning GitHub Actions!"
+      - name: Step 1 - Who am I?
+        run: |
+          echo "User:"
+          whoami
+          echo "Current folder:"
+          pwd
+          echo "Files here:"
+          ls -la
 
+      - name: Step 2 - Create a file
+        run: |
+          echo "This file was created in step 2" > test.txt
+          ls -la
+
+      - name: Step 3 - Can I still see the file?
+        run: |
+          ls -la
