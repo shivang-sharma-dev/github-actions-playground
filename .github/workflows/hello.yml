@@ -7,4 +7,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Print message
-        run: echo "Hello, CI/CD world!"
+        run: "echo I am learning GitHub Actions!"
+
