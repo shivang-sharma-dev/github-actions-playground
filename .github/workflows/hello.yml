@@ -3,11 +3,12 @@ name: Understanding JOBS
 on: 
   push:
   pull_request:
+  workflow_dispatch:
 
 jobs: 
   testing-plugins:
-    runs on: ubuntu-latest
-    steps:
+     runs-on: ubuntu-latest
+     steps:
       - name: checkout my repo 
         uses: actions/checkout@v4
       
