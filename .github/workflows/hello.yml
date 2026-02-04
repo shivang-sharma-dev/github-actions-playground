@@ -2,6 +2,7 @@ name: Practicing Artifacts
 
 on: 
   workflow_dispatch:
+  push:
 
 jobs: 
   job-1-create-a-file:
