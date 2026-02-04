@@ -29,7 +29,7 @@ jobs:
             name: share-files
 
          - name: viewing the file which was uploaded 
-           run: cat share-files/file.txt 
+           run: cat file.txt 
 
       
 
