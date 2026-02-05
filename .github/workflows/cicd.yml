@@ -1,36 +1,37 @@
-name: first ci/cd workflow 
+name: first ci/cd workflow
 
-on: 
+on:
   push:
   pull_request:
   workflow_dispatch:
 
 jobs:
-    job-1:
-        runs-on: ubuntu-latest
-        steps:
-         - name: Checking out code
-           uses: actions/checkout@v4
-         - name: Creating a file 
-           run: echo "MY FIRST CI/CD workflow file">file.txt
+  job-1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checking out code
+        uses: actions/checkout@v4
 
-         - name: Uploading Artifact
-           uses: actions/upload-artifact@v4
-           with:
-            name: share-files
-            path: file.txt
+      - name: Creating a file
+        run: echo "MY FIRST CI/CD workflow file" > file.txt
 
-    job-2:
-        runs-on: ubuntu-latest
-        needs: job-1
-        steps:
-         - name: Downloading Artifact 
-           uses: actions/download-artifact@v4
-           with:
-             name: share-files
-             path: file.txt
-         -  name: Printing file content 
-            run: cat share-files/file.txt
-         -  name: Using Secret variables 
-            run: echo"HELLO${{secrets.my_name}}"
+      - name: Uploading Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: share-files
+          path: file.txt
 
+  job-2:
+    runs-on: ubuntu-latest
+    needs: job-1
+    steps:
+      - name: Downloading Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: share-files
+
+      - name: Printing file content
+        run: cat share-files/file.txt
+
+      - name: Using Secret variables
+        run: echo "HELLO ${{ secrets.MY_NAME }}"
