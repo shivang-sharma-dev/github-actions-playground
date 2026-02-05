@@ -31,7 +31,7 @@ jobs:
           name: share-files
 
       - name: Printing file content
-        run: cat share-files/file.txt
+        run: cat file.txt
 
       - name: Using Secret variables
         run: echo "HELLO ${{ secrets.MY_NAME }}"
