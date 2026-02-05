@@ -2,6 +2,7 @@ name: Practicing Artifacts
 
 on: 
   workflow_dispatch:
+  push:
 
 jobs: 
   job-1-create-a-file:
@@ -25,7 +26,7 @@ jobs:
          - name: downloading artifact 
            uses: actions/download-artifact@v4
            with:
-            name: myfile
+            name: share-files
 
          - name: viewing the file which was uploaded 
            run: cat file.txt 
