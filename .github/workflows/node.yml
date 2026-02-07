@@ -1,20 +1,26 @@
-name: NODE CI 
+name: Node CI with Cache
 
 on:
-  push:
   pull_request:
-  workflow_dispatch:
 
 jobs:
-    test:
-        runs-on: ubuntu-latest
-        steps:
-         -   name: Checkout code
-             uses: actions/checkout@v4
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
 
-         -   name: Setup Node.js
-             uses: actions/setup-node@v4
-             with:
-                 node-version: '18'
-         -   name: Run npm Test
-             run: npm test
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
