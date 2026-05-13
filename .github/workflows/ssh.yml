@@ -1,0 +1,62 @@
+name: Accesing Other Servers Using Bastion Host
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      BASTION_HOST: ${{secrets.BASTION_HOST}}
+      BASTION_USER: ${{secrets.BASTION_USER}}
+      TARGET_HOST: ${{secrets.TARGET_HOST}}
+      TARGET_USER: ${{secrets.TARGET_USER}}
+
+    steps:
+
+    - name: Checkout Code
+      uses: actions/checkout@v6
+
+    - name: Setup SSH
+      run: |
+        mkdir -p ~/.ssh
+
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+
+        cat > ~/.ssh/config << EOF
+        Host bastion
+          HostName $BASTION_HOST
+          User $BASTION_USER
+          IdentityFile ~/.ssh/id_rsa
+          StrictHostKeyChecking no
+
+        Host target
+          HostName $TARGET_HOST
+          User $TARGET_USER
+          ProxyJump bastion
+          IdentityFile ~/.ssh/id_rsa
+          StrictHostKeyChecking no
+        EOF
+
+    - name: SSH Into Private Server Through Bastion
+      run: |
+        ssh target "
+           echo Connected &&
+           hostname &&
+              pwd
+                  "
+    - name: Run Script On Private Server
+      run: |
+        ssh target "
+        cd /opt/qcc-dfr &&
+        chmod +x rishav.sh &&
+        ./rishav.sh OpenAI
+         "
