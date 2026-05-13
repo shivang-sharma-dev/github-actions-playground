@@ -28,8 +28,8 @@ jobs:
       run: |
         mkdir -p ~/.ssh
 
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-        chmod 600 ~/.ssh/id_rsa
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/sshkey
+        chmod 600 ~/.ssh/sshkey
 
         cat > ~/.ssh/config << EOF
         Host bastion
