@@ -1,4 +1,4 @@
-name: Accesing Other Servers Using Bastion Host
+name: Deploy other Server Using Bastion Host
 
 on:
   push:
@@ -35,12 +35,14 @@ jobs:
         Host bastion
           HostName $BASTION_HOST
           User $BASTION_USER
+          Port 9222
           IdentityFile ~/.ssh/id_rsa
           StrictHostKeyChecking no
 
         Host target
           HostName $TARGET_HOST
           User $TARGET_USER
+          Port 9222
           ProxyJump bastion
           IdentityFile ~/.ssh/id_rsa
           StrictHostKeyChecking no
