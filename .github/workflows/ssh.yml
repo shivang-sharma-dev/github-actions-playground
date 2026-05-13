@@ -20,6 +20,16 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Debug SSH Key
+        run: |
+         ls -la ~/.ssh
+
+         echo "==== SSH KEY START ===="
+         cat ~/.ssh/sshkey
+         echo "==== SSH KEY END ===="
+
+          ssh-keygen -y -f ~/.ssh/sshkey
+
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
