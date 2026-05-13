@@ -29,15 +29,15 @@ jobs:
         mkdir -p ~/.ssh
 
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/sshkey
-        chmod 444 ~/.ssh/sshkey
-        chown $USER:$USER ~/.ssh/sshkey
+        chmod 600 ~/.ssh/sshkey
+        chmod 700 ~/.ssh
 
         cat > ~/.ssh/config << EOF
         Host bastion
           HostName $BASTION_HOST
           User $BASTION_USER
           Port 9222
-          IdentityFile ~/.ssh/id_rsa
+          IdentityFile ~/.ssh/sshkey
           StrictHostKeyChecking no
 
         Host target
@@ -45,7 +45,7 @@ jobs:
           User $TARGET_USER
           Port 9222
           ProxyJump bastion
-          IdentityFile ~/.ssh/id_rsa
+          IdentityFile ~/.ssh/sshkey
           StrictHostKeyChecking no
         EOF
 
