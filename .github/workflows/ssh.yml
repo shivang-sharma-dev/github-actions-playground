@@ -23,7 +23,7 @@ jobs:
       - name: Setup SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/sshkey
+          printf "%s" "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/sshkey
           chmod 600 ~/.ssh/sshkey
           
           cat > ~/.ssh/config << EOF
