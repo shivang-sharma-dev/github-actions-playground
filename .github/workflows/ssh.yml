@@ -30,6 +30,7 @@ jobs:
 
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/sshkey
         chmod 600 ~/.ssh/sshkey
+        chown $USER:$USER ~/.ssh/sshkey
 
         cat > ~/.ssh/config << EOF
         Host bastion
