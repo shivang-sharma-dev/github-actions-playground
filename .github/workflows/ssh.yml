@@ -1,80 +1,44 @@
-name: Deploy other Server Using Bastion Host
+name: Deploy Application
+ 
 on:
+
   push:
-    branches: [ main ]
-  workflow_dispatch:
 
-permissions:
-  contents: read
-  packages: write
-
+    branches: [main]
+ 
 jobs:
+
   deploy:
+
     runs-on: ubuntu-latest
-    env:
-      BASTION_HOST: ${{ secrets.BASTION_HOST }}
-      BASTION_USER: ${{ secrets.BASTION_USER }}
-      TARGET_HOST: ${{ secrets.TARGET_HOST }}
-      TARGET_USER: ${{ secrets.TARGET_USER }}
+ 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
 
+      - name: Checkout your code
+
+        uses: actions/checkout@v6
+ 
       - name: Setup SSH
+
+        uses: rishav2404/setup-bastion-ssh@v1
+
+        with:
+
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+ 
+          bastion-host: ${{ secrets.BASTION_HOST }}
+
+          bastion-user: ${{ secrets.BASTION_USER }}
+
+          bastion-port: "9222"
+ 
+          server-host: ${{ secrets.SERVER_HOST }}
+
+          server-user: ${{ secrets.SERVER_USER }}
+ 
+      - name: Perform SSH action
+
         run: |
-          mkdir -p ~/.ssh
-          printf "%s" "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/sshkey
-          chmod 600 ~/.ssh/sshkey
-          
-          cat > ~/.ssh/config << EOF
-          Host bastion
-            HostName $BASTION_HOST
-            User $BASTION_USER
-            Port 9222
-            IdentityFile ~/.ssh/sshkey
-            StrictHostKeyChecking accept-new
-            UserKnownHostsFile ~/.ssh/known_hosts
-          
-          Host target
-            HostName $TARGET_HOST
-            User $TARGET_USER
-            Port 9222
-            ProxyJump bastion
-            IdentityFile ~/.ssh/sshkey
-            StrictHostKeyChecking accept-new
-            UserKnownHostsFile ~/.ssh/known_hosts
-          EOF
-          
-          chmod 600 ~/.ssh/config
-          chmod 700 ~/.ssh
 
-        
-      - name: Debug SSH Key
-        run: |
-         ls -la ~/.ssh
-
-         echo "==== SSH KEY START ===="
-         cat ~/.ssh/sshkey
-         echo "==== SSH KEY END ===="
-
-          ssh-keygen -y -f ~/.ssh/sshkey
-
-      - name: Test Bastion Connection
-        run: |
-          ssh -v bastion "echo 'Bastion connection successful' && hostname"
-
-      - name: SSH Into Private Server Through Bastion
-        run: |
-          ssh target "
-            echo 'Connected to target server'
-            hostname
-            pwd
-          "
-
-      - name: Run Script On Private Server
-        run: |
-          ssh target "
-            cd /opt/qcc-dfr &&
-            chmod +x rishav.sh &&
-            ./rishav.sh OpenAI
-          "
+          ssh target 'cd /xyz && ./deploy.sh'
+ 
