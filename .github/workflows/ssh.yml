@@ -24,7 +24,7 @@ jobs:
 
         with:
 
-          ssh-private-key: ${{ secrets.SSH_KEY }}
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
  
           bastion-host: ${{ secrets.BASTION_HOST }}
 
@@ -32,9 +32,9 @@ jobs:
 
           bastion-port: "9222"
  
-          server-host: ${{ secrets.SERVER_HOST }}
+          server-host: ${{ secrets.TARGET_HOST }}
 
-          server-user: ${{ secrets.SERVER_USER }}
+          server-user: ${{ secrets.TARGET_USER }}
  
       - name: Perform SSH action
 
