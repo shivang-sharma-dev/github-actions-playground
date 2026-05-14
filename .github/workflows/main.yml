@@ -1,0 +1,32 @@
+name: Deploy Test with Action
+ 
+on:
+  push:
+    branches: [main]
+ 
+  workflow_dispatch:
+ 
+permissions:
+  contents: read
+  packages: write
+ 
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+ 
+    steps:
+      - name: Setup Bastion SSH
+        uses: rishav2404/setup-bastion-ssh@v1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+ 
+          bastion-host: ${{ secrets.BASTION_HOST }}
+          bastion-user: ${{ secrets.BASTION_USER }}
+          bastion-port: ${{ secrets.BASTION_PORT }}
+ 
+          server-host: ${{ secrets.TARGET_HOST }}
+          server-user: ${{ secrets.TARGET_USER }}
+ 
+      - name: Execute deployment script
+        run: |
+          ssh target 'bash -lc "cd /opt/qcc-dfr && ./rishav.sh rishav2404"'
